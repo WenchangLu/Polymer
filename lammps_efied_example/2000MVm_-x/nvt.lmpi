@@ -1,0 +1,43 @@
+# REAX potential for 
+# .....
+
+#package         kokkos neigh half comm no newton on
+
+boundary        p p p
+units           real
+
+atom_style      charge
+special_bonds   lj/coul 1 1 1
+read_data       final.lmpdata nocoeff
+
+pair_style      reax/c NULL checkqeq no
+pair_modify     shift yes
+pair_coeff      * * ../../ForceFiledFiles/ffield.reax.FC C H O S
+neighbor        2. bin
+neigh_modify    every 10 delay 0 check no
+fix             q all qeq/reax 1 0.0 10.0 1e-6 reax/c
+                
+variable        dt_MD equal 0.5
+variable        dt_MIN equal 10*v_dt_MD
+timestep        ${dt_MD}
+thermo_style    custom step temp epair etotal press fmax fnorm density
+thermo          20
+variable        Tdamp equal 100*dt
+variable        Pdamp equal 1000*dt
+variable        T0 equal 300
+variable        T1 equal 300
+thermo_style    custom step temp epair etotal press fmax fnorm density vol 
+#dump            dcd all dcd 4 dump.dcd
+#dump_modify     dcd unwrap yes
+
+
+timestep        ${dt_MD}
+fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             efx all efield -2.0e-1 0.0 0.0
+fix             mom all momentum 1 linear 1 1 1
+run             300000 
+unfix           npt
+minimize         0 1.0e-8  100000 100000
+
+write_data      final.lmpdata
+write_data      300ps.lmpdata

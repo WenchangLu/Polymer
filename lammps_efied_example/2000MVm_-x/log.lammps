@@ -1,0 +1,88 @@
+LAMMPS (2 Aug 2023 - Development - patch_2Aug2023-289-gafabb279a3)
+  using 1 OpenMP thread(s) per MPI task
+# REAX potential for
+# .....
+
+#package         kokkos neigh half comm no newton on
+
+boundary        p p p
+units           real
+
+atom_style      charge
+special_bonds   lj/coul 1 1 1
+read_data       final.lmpdata nocoeff
+Reading data file ...
+  orthogonal box = (2.2512904 -0.69876184 0.34092199) to (21.960712 10.368762 17.461079)
+  4 by 2 by 4 MPI processor grid
+  reading atoms ...
+  384 atoms
+  reading velocities ...
+  384 velocities
+  read_data CPU = 0.007 seconds
+
+pair_style      reax/c NULL checkqeq no
+pair_modify     shift yes
+pair_coeff      * * ../../ForceFiledFiles/ffield.reax.FC C H O S
+Reading potential file ../../ForceFiledFiles/ffield.reax.FC with DATE: 2013-06-28
+WARNING: Changed valency_val to valency_boc for X (src/REAXFF/reaxff_ffield.cpp:296)
+neighbor        2. bin
+neigh_modify    every 10 delay 0 check no
+fix             q all qeq/reax 1 0.0 10.0 1e-6 reax/c
+
+variable        dt_MD equal 0.5
+variable        dt_MIN equal 10*v_dt_MD
+timestep        ${dt_MD}
+timestep        0.5
+thermo_style    custom step temp epair etotal press fmax fnorm density
+thermo          20
+variable        Tdamp equal 100*dt
+variable        Pdamp equal 1000*dt
+variable        T0 equal 300
+variable        T1 equal 300
+thermo_style    custom step temp epair etotal press fmax fnorm density vol
+#dump            dcd all dcd 4 dump.dcd
+#dump_modify     dcd unwrap yes
+
+
+timestep        ${dt_MD}
+timestep        0.5
+fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             npt all npt temp 300 ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             npt all npt temp 300 300 ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             npt all npt temp 300 300 50  aniso 0 0 ${Pdamp}
+fix             npt all npt temp 300 300 50  aniso 0 0 500
+fix             efx all efield -2.0e-1 0.0 0.0
+fix             mom all momentum 1 linear 1 1 1
+run             300000
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- pair reaxff command: doi:10.1016/j.parco.2011.08.005
+
+@Article{Aktulga12,
+ author = {H. M. Aktulga and J. C. Fogarty and S. A. Pandit and A. Y. Grama},
+ title = {Parallel Reactive Molecular Dynamics: {N}umerical Methods and Algorithmic Techniques},
+ journal = {Parallel Computing},
+ year =    2012,
+ volume =  38,
+ number =  {4--5},
+ pages =   {245--259}
+}
+
+- fix qeq/reaxff command: doi:10.1016/j.parco.2011.08.005
+
+@Article{Aktulga12,
+ author = {H. M. Aktulga and J. C. Fogarty and S. A. Pandit and A. Y. Grama},
+ title = {Parallel Reactive Molecular Dynamics: {N}umerical Methods and Algorithmic Techniques},
+ journal = {Parallel Computing},
+ year =    2012,
+ volume =  38,
+ pages =   {245--259}
+}
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+ERROR: Must not have electric field component in direction of periodic boundary when using charge equilibration with ReaxFF. (src/REAXFF/fix_qeq_reaxff.cpp:419)
+Last command: run             300000

@@ -30,7 +30,6 @@ variable        Tdamp equal 100*dt
 variable        Pdamp equal 1000*dt
 variable        T0 equal 300
 variable        T1 equal 300
-thermo_style    custom step temp epair etotal press fmax fnorm density vol cel
 #dump            dcd all dcd 4 dump.dcd
 #dump_modify     dcd unwrap yes
 
@@ -49,6 +48,7 @@ run             3000
 
 #unfix           npt
 minimize         0 1.0e-8  100000 100000
+thermo_style    custom step temp epair etotal press fmax fnorm density vol cella cellb cellc cellalpha cellbeta cellgamma
 
 write_data      final.lmpdata
 write_data      300ps.lmpdata

@@ -51,4 +51,3 @@ minimize         0 1.0e-8  100000 100000
 thermo_style    custom step temp epair etotal press fmax fnorm density vol cella cellb cellc cellalpha cellbeta cellgamma
 
 write_data      final.lmpdata
-write_data      300ps.lmpdata

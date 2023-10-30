@@ -18,7 +18,7 @@ Reading data file ...
   384 atoms
   reading velocities ...
   384 velocities
-  read_data CPU = 0.007 seconds
+  read_data CPU = 0.053 seconds
 
 pair_style      reax/c NULL checkqeq no
 pair_modify     shift yes
@@ -46,13 +46,10 @@ thermo_style    custom step temp epair etotal press fmax fnorm density vol
 
 timestep        ${dt_MD}
 timestep        0.5
-fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
-fix             npt all npt temp 300 ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
-fix             npt all npt temp 300 300 ${Tdamp}  aniso 0 0 ${Pdamp}
-fix             npt all npt temp 300 300 50  aniso 0 0 ${Pdamp}
-fix             npt all npt temp 300 300 50  aniso 0 0 500
-fix             efx all efield -2.0e-1 0.0 0.0
-fix             mom all momentum 1 linear 1 1 1
+fix             1 all qeq/reaxff 1 0.0 10.0 1.0e-6 reaxff maxiter 400
+fix             2 all nvt temp 300 300 50.0
+fix             3 all efield 1.0 0.0 0.0
+#fix             4 all wall/reflect xlo EDGE xhi EDGE
 run             300000
 
 CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE

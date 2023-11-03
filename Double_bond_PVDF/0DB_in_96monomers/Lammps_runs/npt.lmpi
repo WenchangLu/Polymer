@@ -45,7 +45,7 @@ timestep        ${dt_MD}
 #fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
 fix             npt all npt temp ${T0} ${T1} ${Tdamp}  iso 0 0 ${Pdamp}
 fix             mom all momentum 1 linear 1 1 1
-run             4000
+run             40000
 unfix           npt
 
 
@@ -53,9 +53,9 @@ write_data npt.lammps
 
 # isotropic volume relaxation to hydrostatic target
 
-fix             3 all box/relax tri 0.0 vmax 1.0e-3
-variable        emin equal pe+f_3/atoms
-thermo_style    custom step temp pe pxx pyy pzz f_3 v_emin  cella cellb cellc cellalpha cellbeta cellgamma
-minimize    1.0e-6 0.001 1000 10000
+#fix             3 all box/relax  vmax 1.0e-3
+#variable        emin equal pe+f_3/atoms
+#thermo_style    custom step temp pe pxx pyy pzz f_3 v_emin  cella cellb cellc cellalpha cellbeta cellgamma
+#minimize    1.0e-6 0.001 1000 10000
 
 write_data final.lammps

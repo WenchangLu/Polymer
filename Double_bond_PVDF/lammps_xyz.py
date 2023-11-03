@@ -29,10 +29,14 @@ line = all_lines[7].split()
 zlo = float(line[0])
 zhi = float(line[1])
 
+xy = 0.0
+xz = 0.0
+yz = 0.0
 line = all_lines[8].split()
-xy = float(line[0])
-xz = float(line[1])
-yz = float(line[2])
+if len(line) > 5:
+    xy = float(line[0])
+    xz = float(line[1])
+    yz = float(line[2])
 
 a = xhi - xlo
 b = math.sqrt((yhi-ylo)*(yhi-ylo) + xy*xy)
@@ -66,5 +70,5 @@ atoms.sort()
 for atom in atoms:
    xyz_lines += "%s   %f   %f   %f\n"%(atom_symbol[atom[1]], atom[2],atom[3],atom[4])
 
-with open("input.xyz", "w") as f:
+with open("final.xyz", "w") as f:
     f.write(xyz_lines)

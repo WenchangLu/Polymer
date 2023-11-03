@@ -39,7 +39,7 @@ dump_modify     qxyz sort id
 dump            xyz_form all xyz 100 dump.xyz
 dump_modify     xyz_form sort id
 
-variable        T0 equal 1300
+variable        T0 equal 300
 variable        T1 equal 300
 timestep        ${dt_MD}
 #fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}

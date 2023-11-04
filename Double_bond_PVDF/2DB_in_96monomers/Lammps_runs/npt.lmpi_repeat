@@ -16,14 +16,14 @@ neighbor        2. bin
 neigh_modify    every 10 delay 0 check no
 fix             q all qeq/reax 1 0.0 10.0 1e-6 reax/c
                 
-variable        dt_MD equal 0.5
+variable        dt_MD equal 0.1
 variable        dt_MIN equal 10*v_dt_MD
 timestep        ${dt_MD}
 thermo_style    custom step temp epair etotal press fmax fnorm density
 thermo          20
 write_data      init.lmpdata
 variable        Tdamp equal 100*dt
-variable        Pdamp equal 1000*dt
+variable        Pdamp equal 100*dt
 compute         Mu all property/atom xu yu zu
 variable        qx atom q*c_Mu[1]
 variable        qy atom q*c_Mu[2]

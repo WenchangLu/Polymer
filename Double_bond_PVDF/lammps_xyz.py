@@ -63,7 +63,18 @@ del all_lines[num_atoms:]
 atoms = []  
 for i in range(num_atoms):  
     line = all_lines[i].split()
-    atoms.append([int(line[0]), int(line[1]), float(line[3]), float(line[4]), float(line[5])])
+    ix = 0
+    iy = 0
+    iz = 0
+    if len(line) > 6:
+        ix = int(line[6])
+        iy = int(line[7])
+        iz = int(line[8])
+    x = float(line[3]) + ix * a + iy * xy + iz * xz
+    y = float(line[4]) + iy * (yhi-ylo) + iz * yz
+    z = float(line[5]) + iz * (zhi-zlo)
+
+    atoms.append([int(line[0]), int(line[1]), x,y,z])
 
 atoms.sort()
 

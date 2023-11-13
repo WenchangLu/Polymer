@@ -42,7 +42,51 @@ for i in range(num_atoms):
 
 rotate_degree = 15.0/180.0 * 3.1415926
 
+input_lines = """
+description="rotate"  
+#******** REAL SPACE GRID ********   
+wavefunction_grid="168 96 296"  
+potential_grid_refinement="2"  
+  
+#******* CONTROL OPTIONS *******  
+start_mode          ="LCAO Start"  
+calculation_mode    ="Relax Structure  "  
+kohn_sham_solver    ="davidson"  
+subdiag_driver      ="auto"  
+#auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  
+cube_rho = "True"  
+relax_method="LBFGS"
+charge_density_mixing = "0.10000000"
 
+  
+#********* K POINT SETUP *********  
+kpoint_mesh = "1 1 1"  
+kpoint_is_shift = "0 0 0"  
+  
+#******* Pseudopotentials *******   
+internal_pseudo_type = "sg15"  
+#use Optimized Norm-Conserving Vanderbilt (ONCV) pseudopotenitals  
+#those pseudopotentials are built in with RMG  
+write_pseudopotential_plots ="False"  
+  
+#*****Exchange Correlation ******  
+exchange_correlation_type="AUTO_XC"  
+#AUTO_XC: XC will be determined from pseudopotential  
+  
+#****  LATTICE and ATOMS  ****   
+bravais_lattice_type="Orthorhombic Primitive"  
+crds_units = "Angstrom"  
+lattice_units = "Angstrom"  
+a_length="      32.00000000"  
+b_length="      18.00000000"  
+c_length="     58.000"
+atomic_coordinate_type = "Absolute"  
+atoms="  
+"""
+
+a_len = 0.0
+b_len = 0.0
+c_len = 0.0
 for ro in range(0, 360, 15):
     rotate_degree = float(ro) /180.0 * 3.1415926
     for i in range(70,num_atoms):
@@ -57,11 +101,29 @@ for ro in range(0, 360, 15):
     x_min = min(atoms, key=lambda x:x[1])[1]
     y_min = min(atoms, key=lambda x:x[2])[2]
     z_min = min(atoms, key=lambda x:x[3])[3]
+    x_max = max(atoms, key=lambda x:x[1])[1]
+    y_max = max(atoms, key=lambda x:x[2])[2]
+    z_max = max(atoms, key=lambda x:x[3])[3]
+
+    a_len = max(a_len, x_max-x_min)
+    b_len = max(b_len, y_max-y_min)
+    c_len = max(c_len, z_max-z_min)
  
     xyz_lines = "%d\n\n"%num_atoms
     for atom in atoms:
         xyz_lines += "%s   %f   %f   %f\n"%(atom[0], atom[1]-x_min + 1.0, atom[2]-y_min + 1.0,atom[3]-z_min + 1.0)
+        input_lines += "%s   %f   %f   %f\n"%(atom[0], atom[1]-x_min + 1.0, atom[2]-y_min + 1.0,atom[3]-z_min + 1.0)
 
-    filename = "rotate_"+str(ro)+".xyz"
+    input_lines += "\"\n"
+    dir_name = "rotate_"+str(ro)
+    if not os.path.isdir(dir_name):
+        os.mkdir(dir_name)
+        
+    filename = dir_name+"/init.xyz"
     with open(filename, "w") as f:
         f.write(xyz_lines)
+    filename = dir_name+"/input"
+    with open(filename, "w") as f:
+        f.write(input_lines)
+
+print(a_len, b_len, c_len)

@@ -42,7 +42,7 @@ for i in range(num_atoms):
 
 rotate_degree = 15.0/180.0 * 3.1415926
 
-input_lines = """
+input_lines_common = """
 description="rotate"  
 #******** REAL SPACE GRID ********   
 wavefunction_grid="168 96 296"  
@@ -109,6 +109,7 @@ for ro in range(0, 360, 15):
     b_len = max(b_len, y_max-y_min)
     c_len = max(c_len, z_max-z_min)
  
+    input_lines = input_lines_common
     xyz_lines = "%d\n\n"%num_atoms
     for atom in atoms:
         xyz_lines += "%s   %f   %f   %f\n"%(atom[0], atom[1]-x_min + 1.0, atom[2]-y_min + 1.0,atom[3]-z_min + 1.0)

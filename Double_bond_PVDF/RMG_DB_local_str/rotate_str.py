@@ -3,6 +3,7 @@
 import sys
 import os
 import math
+import copy
 
 with open("input.xyz", "r") as f:
         all_lines = f.readlines()
@@ -87,13 +88,20 @@ atoms="
 a_len = 0.0
 b_len = 0.0
 c_len = 0.0
+atoms_keep = copy.deepcopy(atoms)
+
 for ro in range(0, 380, 15):
     rotate_degree = float(ro) /180.0 * 3.1415926
+    cosa = math.cos(rotate_degree)
+    sina = math.sin(rotate_degree)
+
+    atoms = []
+
+    atoms = copy.deepcopy(atoms_keep)
+       
     for i in range(70,num_atoms):
         x = atoms[i][1]
         y = atoms[i][2]
-        cosa = math.cos(rotate_degree)
-        sina = math.sin(rotate_degree)
 
         atoms[i][1] = x * cosa + y * sina
         atoms[i][2] = x * sina - y * cosa
@@ -105,6 +113,7 @@ for ro in range(0, 380, 15):
     y_max = max(atoms, key=lambda x:x[2])[2]
     z_max = max(atoms, key=lambda x:x[3])[3]
 
+    print(ro, x_min, x_max)
     a_len = max(a_len, x_max-x_min)
     b_len = max(b_len, y_max-y_min)
     c_len = max(c_len, z_max-z_min)

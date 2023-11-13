@@ -87,7 +87,7 @@ atoms="
 a_len = 0.0
 b_len = 0.0
 c_len = 0.0
-for ro in range(0, 360, 15):
+for ro in range(0, 380, 15):
     rotate_degree = float(ro) /180.0 * 3.1415926
     for i in range(70,num_atoms):
         x = atoms[i][1]

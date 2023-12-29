@@ -52,12 +52,16 @@ for ix in range(num_cell_x):
 
 x = atoms[first_id][1] + (atoms[second_id][1] - atoms[first_id][1]) * 0.7
 y = atoms[first_id][2] + (atoms[second_id][2] - atoms[first_id][2]) * 0.7
-z = atoms[first_id][2] + (atoms[second_id][2] - atoms[first_id][2] - lattice_vec[8]) * 0.7
+z = atoms[first_id][3] + (atoms[second_id][3] - atoms[first_id][3] - lattice_vec[8]) * 0.7
+print(atoms[first_id])
+print(atoms[second_id])
+
 atoms_replica.append(["H",  x, y, z])
 x = atoms[second_id][1] + (atoms[first_id][1] - atoms[second_id][1]) * 0.7
 y = atoms[second_id][2] + (atoms[first_id][2] - atoms[second_id][2]) * 0.7
-z = atoms[second_id][2] + (atoms[first_id][2] - atoms[second_id][2] + lattice_vec[8]) * 0.7
-atoms_replica.append(["H",  x, y, z + num_cell_z * lattice_vec[8]])
+z = atoms[second_id][3] + (atoms[first_id][3] - atoms[second_id][3] + lattice_vec[8]) * 0.7
+print(x,y,z)
+atoms_replica.append(["H",  x, y, z + (num_cell_z-1.0) * lattice_vec[8]])
 
 xyz_lines = "%d\n"%len(atoms_replica)
 

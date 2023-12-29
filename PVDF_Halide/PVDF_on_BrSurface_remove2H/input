@@ -10,6 +10,8 @@ kohn_sham_solver    ="davidson"
 subdiag_driver      ="auto"  
 #auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  
 cube_rho = "True"  
+charge_density_mixing = "0.10000000"
+
   
 #********* K POINT SETUP *********  
 kpoint_mesh = "1 1 1"  

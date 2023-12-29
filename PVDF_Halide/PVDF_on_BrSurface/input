@@ -5,12 +5,14 @@ potential_grid_refinement="2"
   
 #******* CONTROL OPTIONS *******  
 start_mode          ="LCAO Start"  
-calculation_mode    ="Quench Electrons  "  
+calculation_mode    ="Relax Structure  "  
 kohn_sham_solver    ="davidson"  
 subdiag_driver      ="auto"  
 #auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  
 cube_rho = "True"  
   
+charge_density_mixing = "0.10000000"
+
 #********* K POINT SETUP *********  
 kpoint_mesh = "1 1 1"  
 kpoint_is_shift = "0 0 0"  

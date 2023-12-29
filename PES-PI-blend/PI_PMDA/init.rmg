@@ -5,7 +5,9 @@ potential_grid_refinement="2"
   
 #******* CONTROL OPTIONS *******  
 start_mode          ="LCAO Start"  
-calculation_mode    ="Quench Electrons  "  
+calculation_mode    ="Relax Structure"
+relax_method = "LBFGS"
+
 kohn_sham_solver    ="davidson"  
 subdiag_driver      ="auto"  
 #auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  

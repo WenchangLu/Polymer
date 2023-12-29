@@ -6,7 +6,7 @@ import math
 
 num_cell_x = 1
 num_cell_y = 1
-num_cell_z = 5
+num_cell_z = 10
 first_id = 7
 second_id = 16
 

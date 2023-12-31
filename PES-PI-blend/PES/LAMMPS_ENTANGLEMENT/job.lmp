@@ -5,7 +5,7 @@
 units          real
 dimension      3d
 boundary       p p p
-atom_style     full
+atom_style     charge
 
 # Atom Definition
 replicate      1 1 1

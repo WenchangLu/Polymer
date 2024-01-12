@@ -1,1 +1,5 @@
 These are Polymer related projects
+
+From xyz file to lammps with charmm force field
+(1) obabel file.xyz -omol2 -Ofile.mol2
+

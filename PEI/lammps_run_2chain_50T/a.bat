@@ -1,0 +1,19 @@
+
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi
+mpirun -n 16 ~/lammps/build/lmp -in npt.lmpi

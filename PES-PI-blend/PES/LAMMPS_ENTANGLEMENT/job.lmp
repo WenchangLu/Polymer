@@ -3,12 +3,12 @@
 
 # Initialization
 units          real
-dimension      3d
+dimension      3
 boundary       p p p
-atom_style     full
+atom_style     charge
+read_data       ./job.lmpdat
 
 # Atom Definition
-replicate      1 1 1
 
 
 # Settings

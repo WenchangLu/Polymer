@@ -37,6 +37,8 @@ for i in range(num_atoms):
 if len(lattice_vec) != 9:
    print("lattice info missing")
 
+
+
 atoms_replica = []
 for ix in range(num_cell_x):
     for iy in range(num_cell_y):
@@ -47,6 +49,16 @@ for ix in range(num_cell_x):
             for atom in atoms:
                 atoms_replica.append([atom[0], atom[1] + x, atom[2]+y, atom[3]+z])
 
+for i in range(len(atoms_replica)):
+    if atoms_replica[i][0] == 'S':
+        for j in range(len(atoms_replica)):
+            if atoms_replica[j][0] == 'O':
+                dist = (atoms_replica[i][1] - atoms_replica[j][1]) * (atoms_replica[i][1] - atoms_replica[j][1]) 
+                dist +=  (atoms_replica[i][2] - atoms_replica[j][2]) * (atoms_replica[i][2] - atoms_replica[j][2]) 
+                dist +=  (atoms_replica[i][3] - atoms_replica[j][3]) * (atoms_replica[i][3] - atoms_replica[j][3]) 
+                dist = math.sqrt(dist)
+                if dist < 2.0:
+                   print('fix 1 all restrain bond %d %d 2000.0 2000.0 %f'%( i+1, j+1, dist))
 
 ## add twi H at the end of monomers
 
@@ -73,7 +85,7 @@ lattice_vec[4] = num_cell_y * lattice_vec[4]
 lattice_vec[5] = num_cell_y * lattice_vec[5]
 lattice_vec[6] = num_cell_z * lattice_vec[6]
 lattice_vec[7] = num_cell_z * lattice_vec[7]
-lattice_vec[8] = num_cell_z * lattice_vec[8]
+lattice_vec[8] = num_cell_z * lattice_vec[8]+3.0
 lattice = ""
 for a in lattice_vec:
     lattice += "%f "%a

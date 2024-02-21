@@ -6,7 +6,10 @@ units          real
 dimension      3
 boundary       p p p
 atom_style     charge
+<<<<<<< HEAD
 read_data       ./job.lmpdat
+=======
+>>>>>>> 3b1f49170a7f548808a400ab8c9b1a0b039807a4
 
 # Atom Definition
 

@@ -1,0 +1,7 @@
+Usage
+case1: python qxyz2eps.py dump.qxyz.txt 24 300
+case2: python qxyz2eps.py dump.qxyz.txt blend 300
+
+arg1: str: reading file name
+arg2: int: number of atoms per group or str: hard coded groups defined in dump2dipole.py
+arg3: int: temperature

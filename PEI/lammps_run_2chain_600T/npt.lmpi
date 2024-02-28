@@ -12,7 +12,8 @@ replicate       1 1 1
 #change_box all triclinic
 pair_style      reax/c NULL
 #pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.FC C O H N
-pair_coeff      * * ../../ForceFiledFiles/ffield.reax.FC C H O N
+#pair_coeff      * * ../../ForceFiledFiles/ffield.reax.FC C H O N
+pair_coeff      * * ../../ForceFiledFiles/ffield.reax.mattsson C H O N
 neighbor        2. bin
 neigh_modify    every 10 delay 0 check no
 fix             q all qeq/reax 1 0.0 10.0 1e-6 reax/c
@@ -46,7 +47,7 @@ timestep        ${dt_MD}
 #fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
 fix             npt all npt temp ${T0} ${T1} ${Tdamp}  iso 0 0 ${Pdamp}
 fix             mom all momentum 1 linear 1 1 1
-run             500000
+run             1000000
 unfix           npt
 
 

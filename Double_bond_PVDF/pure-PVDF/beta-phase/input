@@ -10,9 +10,11 @@ kohn_sham_solver    ="davidson"
 subdiag_driver      ="auto"  
 #auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  
 cube_rho = "True"  
+stress = "true"
+relax_method="LBFGS"
   
 #********* K POINT SETUP *********  
-kpoint_mesh = "1 1 1"  
+kpoint_mesh = "2 3 6"  
 kpoint_is_shift = "0 0 0"  
   
 #******* Pseudopotentials *******   

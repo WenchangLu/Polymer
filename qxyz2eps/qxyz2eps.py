@@ -3,7 +3,7 @@
 from dump2dipole import dump2dipole
 import sys
 import numpy as np
-dt = 1.0e-15 *20  # from lammps time step, dt = 0.1 fs, record every 20 steps
+dt = 0.2e-15 *20  # from lammps time step, dt = 0.1 fs, record every 20 steps
 fName = sys.argv[1]
 N_atom_group = sys.argv[2]
 temperature = np.float(sys.argv[3])

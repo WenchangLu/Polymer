@@ -14,7 +14,7 @@ def dump2dipole(fName,N_atom_group,flagDebug=False, hardCoded=False):
         next(f)
 
         # check it is a general group way or hard coded way
-        if unicode(N_atom_group).isnumeric():
+        if N_atom_group.isnumeric():
 
             N_atom_group = int(N_atom_group)
 
@@ -42,9 +42,9 @@ def dump2dipole(fName,N_atom_group,flagDebug=False, hardCoded=False):
             print('The second input is wrong.')
 
         # compute the volume
-        xlo,xhi=np.array(next(f).strip().split(),dtype=np.float)
-        ylo,yhi=np.array(next(f).strip().split(),dtype=np.float)
-        zlo,zhi=np.array(next(f).strip().split(),dtype=np.float)
+        xlo,xhi, xy=np.array(next(f).strip().split(),dtype=np.float)
+        ylo,yhi, yz=np.array(next(f).strip().split(),dtype=np.float)
+        zlo,zhi, xz=np.array(next(f).strip().split(),dtype=np.float)
         Lx,Ly,Lz = xhi-xlo,yhi-ylo,zhi-zlo
         Volume = Lx*Ly*Lz
 

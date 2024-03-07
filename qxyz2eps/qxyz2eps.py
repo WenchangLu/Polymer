@@ -3,7 +3,7 @@
 from dump2dipole import dump2dipole
 import sys
 import numpy as np
-
+dt = 0.2e-15 *20  # from lammps time step, dt = 0.1 fs, record every 20 steps
 fName = sys.argv[1]
 N_atom_group = sys.argv[2]
 temperature = np.float(sys.argv[3])
@@ -34,3 +34,14 @@ eps = m_var/box_volume/temperature*unitConv_eps_au2gcs
 
 print(eps)
 np.savetxt('eps.txt',np.column_stack((np.arange(len(eps)),eps)))
+
+eps_t = eps.sum(axis=1)/3.0
+eps_f = np.fft.rfft(eps_t)
+
+total_time = dt *float(len(eps_t))
+print( len(eps_t), len(eps_f), total_time, dt)
+
+freq = np.arange(len(eps_f))
+np.savetxt('eps_f.txt',np.vstack((freq/total_time, eps_f.imag * freq, eps_f.real * freq)).T)
+np.savetxt('eps_t.txt',eps_t)
+

@@ -5,16 +5,19 @@ potential_grid_refinement="2"
   
 #******* CONTROL OPTIONS *******  
 start_mode          ="LCAO Start"  
+calculation_mode    ="Relax Structure"
 calculation_mode    ="Quench Electrons  "  
 kohn_sham_solver    ="davidson"  
 subdiag_driver      ="auto"  
 #auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  
 cube_rho = "True"  
+stress= "true"
+relax_method = "LBFGS"
   
 #********* K POINT SETUP *********  
 kpoint_mesh="3  2  3  "  
 kpoint_is_shift="0 0 0"   
-kpoint_distribution = "1"   
+#kpoint_distribution = "1"   
   
 #******* Pseudopotentials *******   
 internal_pseudo_type = "sg15"  
@@ -31,9 +34,9 @@ bravais_lattice_type="None"
 crds_units = "Bohr"  
 lattice_units = "Bohr"  
 lattice_vector="  
- 1.033100661437e+01  0.000000000000e+00  -6.438139280065e-02   
+ 1.033100661437e+01  0.000000000000e+00  0.
  0.000000000000e+00  1.984712886166e+01  0.000000000000e+00   
- -5.654269871684e-02  0.000000000000e+00  9.281818157223e+00   
+ 0.  0.000000000000e+00  9.281818157223e+00   
 "  
 atomic_coordinate_type = "Cell Relative"  
 atoms="  

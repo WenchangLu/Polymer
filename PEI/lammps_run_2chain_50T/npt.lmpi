@@ -47,7 +47,7 @@ timestep        ${dt_MD}
 #fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
 fix             npt all npt temp ${T0} ${T1} ${Tdamp}  iso 0 0 ${Pdamp}
 fix             mom all momentum 1 linear 1 1 1
-run             500000
+run             1000000
 unfix           npt
 
 

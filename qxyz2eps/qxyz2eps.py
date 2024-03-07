@@ -1,4 +1,4 @@
-#!$(which python3)
+#!/usr/bin/python3
 
 from dump2dipole import dump2dipole
 import sys

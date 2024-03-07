@@ -1,7 +1,12 @@
-Usage
-case1: python qxyz2eps.py dump.qxyz.txt 24 300
-case2: python qxyz2eps.py dump.qxyz.txt blend 300
+case1: python qxyz2eps.py 
+case2: python qxyz2eps.py dump.qxyz.txt 
+if no file argument, default file name will be dump.qxyz.txt
+copy atom_group.py_example to atom_group.py and modify it
 
-arg1: str: reading file name
-arg2: int: number of atoms per group or str: hard coded groups defined in dump2dipole.py
-arg3: int: temperature
+groups define the dipole calculation groups
+temperature is obviuse
+dt: recording steps 20 and the time_step for MD
+
+groups = [[1, 44],[44,88],[88, 132], [132, 176], [176, 220],[220, 264], [264, 314],[314,364],[364,414],[414,464],[464,514],[514,564]]
+temperature = 600.0
+dt = 0.2e-15 *20

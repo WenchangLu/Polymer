@@ -2,8 +2,9 @@
 import numpy as np
 import sys
 
-def dump2dipole(fName,N_atom_group,flagDebug=False, hardCoded=False):
+def dump2dipole(fName,groups,flagDebug=False, hardCoded=False):
 
+    N_group = len(groups)
     with open(fName,'r') as f:
         for _ in range(3):
             next(f)
@@ -13,38 +14,22 @@ def dump2dipole(fName,N_atom_group,flagDebug=False, hardCoded=False):
 
         next(f)
 
-        # check it is a general group way or hard coded way
-        if N_atom_group.isnumeric():
-
-            N_atom_group = int(N_atom_group)
-
-            if N_atom_group>0:
-                N_group = int(Natom/N_atom_group)
-                N_atom_group = int(Natom/N_group)
-            else:
-                N_group, N_atom_group = int(1), Natom 
-
-        elif N_atom_group.isalpha():
-            hardCoded = True
-            N_atom_group = str(N_atom_group)
-            if N_atom_group == 'blend':
-                N_group = 4
-                groups = [[435, 469], [470, 507], [508, 545], [546, 583]]
-            elif N_atom_group == 'peeu':
-                N_group = 16
-                groups = [[1, 38], [38, 76], [77, 114], [115, 147], [148, 185], [186, 223], 
-                        [224, 261], [262, 294], [295, 332],[333, 370], [371, 408], [409, 441], 
-                        [442, 479], [480, 517], [518, 555], [556, 588]]
-            else:
-                print('The group type is undefined.')
-
-        else:
-            print('The second input is wrong.')
-
         # compute the volume
-        xlo,xhi, xy=np.array(next(f).strip().split(),dtype=np.float)
-        ylo,yhi, yz=np.array(next(f).strip().split(),dtype=np.float)
-        zlo,zhi, xz=np.array(next(f).strip().split(),dtype=np.float)
+        xtem=np.array(next(f).strip().split(),dtype=np.float)
+        ytem=np.array(next(f).strip().split(),dtype=np.float)
+        ztem=np.array(next(f).strip().split(),dtype=np.float)
+        if len(xtem) == 3:
+            xlo,xhi, xy=xtem
+            ylo,yhi, yz=ytem
+            zlo,zhi, xz=ztem
+        else:
+            xlo,xhi=xtem
+            ylo,yhi=ytem
+            zlo,zhi=ztem
+            xy = 0.0
+            yz = 0.0
+            xz = 0.0
+            
         Lx,Ly,Lz = xhi-xlo,yhi-ylo,zhi-zlo
         Volume = Lx*Ly*Lz
 
@@ -89,12 +74,8 @@ def dump2dipole(fName,N_atom_group,flagDebug=False, hardCoded=False):
                 for iGroup in range(N_group):
 
                     # i0_atom and i1_atom are the start and end atom id
-                    if hardCoded:
-                        i0_atom = groups[iGroup][0]-1
-                        i1_atom = groups[iGroup][1]
-                    else:
-                        i0_atom = iGroup*N_atom_group
-                        i1_atom = i0_atom + N_atom_group
+                    i0_atom = groups[iGroup][0]-1
+                    i1_atom = groups[iGroup][1]
 
                     # neutralize the charge within the group
                     qxyz[i0_atom:i1_atom,0] -= qxyz[i0_atom:i1_atom,0].mean()

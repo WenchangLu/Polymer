@@ -3,13 +3,16 @@
 from dump2dipole import dump2dipole
 import sys
 import numpy as np
-dt = 0.2e-15 *20  # from lammps time step, dt = 0.1 fs, record every 20 steps
-fName = sys.argv[1]
-N_atom_group = sys.argv[2]
-temperature = np.float(sys.argv[3])
+from atom_group import *
+# atom_group.py define the block of atoms and temperature, and dt
+if len(sys.argv) == 2: 
+    fName = sys.argv[1]
+else:
+    fName = "dump.qxyz.txt"
+
 
 box_volume,dipole_group_sum = dump2dipole(
-        fName,flagDebug=True,N_atom_group=N_atom_group)
+        fName,flagDebug=True,groups = groups)
 
 # dipole moment with time steps
 np.savetxt('m.txt',np.column_stack((np.arange(len(dipole_group_sum)),dipole_group_sum)))

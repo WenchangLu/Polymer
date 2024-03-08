@@ -7,7 +7,7 @@ import copy
 
 first_id = 7
 last_id =17
-remove_ids = [81 ,15 ]
+remove_ids = [71 ,15 ]
 with open("PI-PMDA.xyz", "r") as f:
         all_lines = f.readlines()
 

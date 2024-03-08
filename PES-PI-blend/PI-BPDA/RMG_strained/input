@@ -9,7 +9,7 @@ calculation_mode    ="Relax Structure"
 relax_method = "LBFGS"
 kohn_sham_solver    ="davidson"  
 subdiag_driver      ="auto"  
-cell_relax = "true"
+cell_relax = "false"
 
 #auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  
 cube_rho = "True"  

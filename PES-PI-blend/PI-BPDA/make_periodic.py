@@ -45,8 +45,8 @@ for i in range(num_atoms):
     atoms[i][1] = x * cosa - z * sina
     atoms[i][3] = x * sina + z * cosa
 
-for i in remove_ids:
-    del atoms[i]
+#for i in remove_ids:
+#    del atoms[i]
 
 
 x_min = min(atoms, key=lambda x:x[1])[1]

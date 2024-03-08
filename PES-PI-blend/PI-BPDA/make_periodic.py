@@ -32,8 +32,8 @@ sina = y/math.sqrt(x*x+y*y)
 for i in range(num_atoms):
     x = atoms[i][1]
     y = atoms[i][2]
-    atoms[i][1] = x * cosa + y * sina
-    atoms[i][2] = x * sina - y * cosa
+#    atoms[i][1] = x * cosa + y * sina
+#    atoms[i][2] = x * sina - y * cosa
 
 x = atoms[last_id][1]
 z = atoms[last_id][3]

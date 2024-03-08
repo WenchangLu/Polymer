@@ -20,10 +20,10 @@ x0 = atoms[first_id][1]
 y0 = atoms[first_id][2]
 z0 = atoms[first_id][3]
 
-#for i in range(num_atoms):
-#    atoms[i][1] -= x0
-#    atoms[i][2] -= y0
-#    atoms[i][3] -= z0
+for i in range(num_atoms):
+    atoms[i][1] -= x0
+    atoms[i][2] -= y0
+    atoms[i][3] -= z0
 
 x = atoms[last_id][1]
 y = atoms[last_id][2]
@@ -32,8 +32,8 @@ sina = y/math.sqrt(x*x+y*y)
 for i in range(num_atoms):
     x = atoms[i][1]
     y = atoms[i][2]
-#    atoms[i][1] = x * cosa + y * sina
-#    atoms[i][2] = x * sina - y * cosa
+    atoms[i][1] = x * cosa + y * sina
+    atoms[i][2] = x * sina - y * cosa
 
 x = atoms[last_id][1]
 z = atoms[last_id][3]
@@ -42,11 +42,11 @@ sina = x/math.sqrt(x*x+z*z)
 for i in range(num_atoms):
     x = atoms[i][1]
     z = atoms[i][3]
-#    atoms[i][1] = x * cosa - z * sina
-#    atoms[i][3] = x * sina + z * cosa
+    atoms[i][1] = x * cosa - z * sina
+    atoms[i][3] = x * sina + z * cosa
 
-#for i in remove_ids:
-#    del atoms[i]
+for i in remove_ids:
+    del atoms[i]
 
 
 x_min = min(atoms, key=lambda x:x[1])[1]
@@ -57,9 +57,6 @@ y_max = max(atoms, key=lambda x:x[2])[2]
 z_max = max(atoms, key=lambda x:x[3])[3]
 
 print(x_min, y_min, z_min)
-x_min = 0.0
-y_min = 0.0
-z_min = 0.0
 xyz_lines = "%d\n\n"%len(atoms)
 for atom in atoms:
     xyz_lines += "%s   %f   %f   %f\n"%(atom[0], atom[1]-x_min , atom[2]-y_min ,atom[3]-z_min )

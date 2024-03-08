@@ -42,8 +42,8 @@ sina = x/math.sqrt(x*x+z*z)
 for i in range(num_atoms):
     x = atoms[i][1]
     z = atoms[i][3]
-    atoms[i][1] = x * cosa - z * sina
-    atoms[i][3] = x * sina + z * cosa
+#    atoms[i][1] = x * cosa - z * sina
+#    atoms[i][3] = x * sina + z * cosa
 
 #for i in remove_ids:
 #    del atoms[i]

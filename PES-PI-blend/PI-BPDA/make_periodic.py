@@ -20,10 +20,10 @@ x0 = atoms[first_id][1]
 y0 = atoms[first_id][2]
 z0 = atoms[first_id][3]
 
-for i in range(num_atoms):
-    atoms[i][1] -= x0
-    atoms[i][2] -= y0
-    atoms[i][3] -= z0
+#for i in range(num_atoms):
+#    atoms[i][1] -= x0
+#    atoms[i][2] -= y0
+#    atoms[i][3] -= z0
 
 x = atoms[last_id][1]
 y = atoms[last_id][2]
@@ -57,6 +57,9 @@ y_max = max(atoms, key=lambda x:x[2])[2]
 z_max = max(atoms, key=lambda x:x[3])[3]
 
 print(x_min, y_min, z_min)
+x_min = 0.0
+y_min = 0.0
+z_min = 0.0
 xyz_lines = "%d\n\n"%len(atoms)
 for atom in atoms:
     xyz_lines += "%s   %f   %f   %f\n"%(atom[0], atom[1]-x_min , atom[2]-y_min ,atom[3]-z_min )

@@ -1,0 +1,51 @@
+description="bpvdf_UsPBE.in"  
+#******** REAL SPACE GRID ********   
+wavefunction_grid="56 32 16"  
+potential_grid_refinement="2"  
+  
+#******* CONTROL OPTIONS *******  
+start_mode          ="LCAO Start"  
+calculation_mode    ="Relax Structure  "  
+kohn_sham_solver    ="davidson"  
+subdiag_driver      ="auto"  
+#auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  
+cube_rho = "True"  
+stress = "true"
+relax_method="LBFGS"
+  
+#********* K POINT SETUP *********  
+kpoint_mesh = "2 3 6"  
+kpoint_is_shift = "0 0 0"  
+  
+#******* Pseudopotentials *******   
+internal_pseudo_type = "sg15"  
+#use Optimized Norm-Conserving Vanderbilt (ONCV) pseudopotenitals  
+#those pseudopotentials are built in with RMG  
+write_pseudopotential_plots ="False"  
+  
+#*****Exchange Correlation ******  
+exchange_correlation_type="AUTO_XC"  
+#AUTO_XC: XC will be determined from pseudopotential  
+  
+#****  LATTICE and ATOMS  ****   
+bravais_lattice_type="Orthorhombic Primitive"  
+crds_units = "Bohr"  
+lattice_units = "Bohr"  
+a_length="     16.91688000"  
+b_length="      9.44124306"  
+c_length="      4.88999333"  
+atomic_coordinate_type = "Cell Relative"  
+atoms="  
+C  0.000000000000e+00 5.527682030000e-01 0.000000000000e+00  1 1 1   0.00   0.00   0.00  
+C  5.000000000000e-01 5.276855800000e-02 0.000000000000e+00  1 1 1   0.00   0.00   0.00  
+C  0.000000000000e+00 3.876424340000e-01 5.000000000000e-01  1 1 1   0.00   0.00   0.00  
+C  5.000000000000e-01 8.876426670000e-01 5.000000000000e-01  1 1 1   0.00   0.00   0.00  
+F  1.235948220000e-01 7.221741270000e-01 0.000000000000e+00  1 1 1   0.00   0.00   0.00  
+F  8.764051780000e-01 7.221741270000e-01 0.000000000000e+00  1 1 1   0.00   0.00   0.00  
+F  6.235948060000e-01 2.221744430000e-01 0.000000000000e+00  1 1 1   0.00   0.00   0.00  
+F  3.764051940000e-01 2.221744430000e-01 0.000000000000e+00  1 1 1   0.00   0.00   0.00  
+H  9.881906900000e-02 2.576201450000e-01 5.000000000000e-01  1 1 1   0.00   0.00   0.00  
+H  9.011809310000e-01 2.576201450000e-01 5.000000000000e-01  1 1 1   0.00   0.00   0.00  
+H  4.011809750000e-01 7.576203540000e-01 5.000000000000e-01  1 1 1   0.00   0.00   0.00  
+H  5.988190250000e-01 7.576203540000e-01 5.000000000000e-01  1 1 1   0.00   0.00   0.00  
+"  

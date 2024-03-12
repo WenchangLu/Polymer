@@ -5,7 +5,7 @@ potential_grid_refinement="2"
   
 #******* CONTROL OPTIONS *******  
 start_mode          ="LCAO Start"  
-calculation_mode    ="Quench Electrons  "  
+calculation_mode    ="Relax Structure"
 kohn_sham_solver    ="davidson"  
 subdiag_driver      ="auto"  
 #auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  
@@ -16,7 +16,8 @@ kpoint_mesh = "1 1 1"
 kpoint_is_shift = "0 0 0"  
   
 #******* Pseudopotentials *******   
-internal_pseudo_type = "sg15"  
+internal_pseudo_type = "sg15"
+internal_pseudo_type = "nc_accuracy"  
 #use Optimized Norm-Conserving Vanderbilt (ONCV) pseudopotenitals  
 #those pseudopotentials are built in with RMG  
 write_pseudopotential_plots ="False"  

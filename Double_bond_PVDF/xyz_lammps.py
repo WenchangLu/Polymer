@@ -7,12 +7,14 @@ import math
 mass_dict = {
         "C":12.0107,
         "H":1.00794,
-        "F":18.998404
+        "F":18.998404,
+        "Cl":35.45
         }
 type_dict = {
         "C":1,
         "H":3,
-        "F":2
+        "F":2,
+        "Cl":4
         }
 
 if len(sys.argv) > 1:

@@ -4,7 +4,7 @@ import sys
 import os
 import math
 
-atom_symbol = [" ","C", "F", "H"]
+atom_symbol = [" ","C", "F", "H", "Cl"]
 if len(sys.argv) > 1:
     with open(sys.argv[1], "r") as f:
         all_lines = f.readlines()

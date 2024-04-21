@@ -7,7 +7,6 @@ H  3.790176804630e+00 8.852976639310e+00 9.965370382100e-01  1 1 1   0.00   0.00
 H  1.640291889110e+00 3.911415060800e+00 1.349092930220e+00  1 1 1   0.00   0.00   0.00  
 F  2.250425308600e+00 6.725148278380e+00 1.384452029230e+00  1 1 1   0.00   0.00   0.00  
 C  3.623668699410e+00 6.773904383900e+00 1.425364016790e+00  1 1 1   0.00   0.00   0.00  
-H  2.130875222200e-01 2.961552453230e+00 1.779313966570e+00  1 1 1   0.00   0.00   0.00  
 C  1.305210654090e+00 2.959344519430e+00 1.779929553010e+00  1 1 1   0.00   0.00   0.00  
 C  4.056275563360e+00 6.783409784510e+00 2.915895137280e+00  1 1 1   0.00   0.00   0.00  
 H  5.145804484980e+00 6.643199132370e+00 2.986486839100e+00  1 1 1   0.00   0.00   0.00  
@@ -861,36 +860,3 @@ F  2.322909130180e+00 8.090712245080e+00 1.677700342410e+02  1 1 1   0.00   0.00
 C  3.691690023870e+00 7.962688088330e+00 1.678339018043e+02  1 1 1   0.00   0.00   0.00  
 H  2.288209588160e-01 1.858591389220e+00 1.681457206060e+02  1 1 1   0.00   0.00   0.00  
 C  1.321462752310e+00 1.903894742320e+00 1.681549138078e+02  1 1 1   0.00   0.00   0.00  
-
-
-description="input.xyz"  
-#******** REAL SPACE GRID ********   
-wavefunction_grid="28 52 852"  
-potential_grid_refinement="2"  
-  
-#******* CONTROL OPTIONS *******  
-start_mode          ="LCAO Start"  
-calculation_mode    ="Quench Electrons  "  
-kohn_sham_solver    ="davidson"  
-subdiag_driver      ="auto"  
-#auto: if cuda available, use cusolver, otherwise use lapack for n<128 and scaplack for large system  
-cube_rho = "True"  
-  
-#********* K POINT SETUP *********  
-kpoint_mesh = "1 1 1"  
-kpoint_is_shift = "0 0 0"  
-  
-#******* Pseudopotentials *******   
-internal_pseudo_type = "sg15"  
-#use Optimized Norm-Conserving Vanderbilt (ONCV) pseudopotenitals  
-#those pseudopotentials are built in with RMG  
-write_pseudopotential_plots ="False"  
-  
-#*****Exchange Correlation ******  
-exchange_correlation_type="AUTO_XC"  
-#AUTO_XC: XC will be determined from pseudopotential  
-  
-#****  LATTICE and ATOMS  ****   
-bravais_lattice_type="None"  
-crds_units = "Angstrom"  
-lattice_units = "Angstrom"  

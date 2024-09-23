@@ -75,7 +75,7 @@ for i in range(num_units):
             x = atom[1] + a_shift[i]
             y = atom[2] + b_shift[i]
             z = atom[3]
-            atoms_blend.append([atom[0], x,y,z])
+            atoms_blend.append([atom[0], x,y,z + 8.0])
 
 
 xyz_lines = "%d\n"%len(atoms_blend)

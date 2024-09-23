@@ -10,13 +10,13 @@ read_data       ./final.lammps
 replicate       1 1 1
 
 #change_box all triclinic
-pair_style      reax/c NULL
+pair_style      reaxff NULL
 #pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.FC C O H N
 #pair_coeff      * * ../../ForceFiledFiles/ffield.reax.FC C H O N
 pair_coeff      * * ../../ForceFiledFiles/ffield.reax.mattsson C H O N
 neighbor        2. bin
 neigh_modify    every 10 delay 0 check no
-fix             q all qeq/reax 1 0.0 10.0 1e-6 reax/c
+fix             q all qeq/reax 1 0.0 10.0 1e-6 reaxff
                 
 variable        dt_MD equal 0.1
 variable        dt_MIN equal 10*v_dt_MD

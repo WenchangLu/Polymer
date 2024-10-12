@@ -3,22 +3,25 @@
 import sys
 import os
 import math
+from random import random
 
 file1 = "PEI.xyz"
 file2 = "BPDA.xyz"
 #blend = [1,1,1,1,1,1]  #pure PES
-a0 = 8.0
-b0 = 14.0
-num_units = 18
-blend = [3,3,3,3,3,3]  #5 PES + 1 PI
-blend = [1,1,1,1,1,1,1,1,1]
-#blend += [2,2,2,2,2,2,2,2,2]
-blend += [2,2,2,2,2,2,2,2,2]
-a_shift = [0.0, a0, 2.0*a0, 0.5 *a0, 1.5 * a0, 2.5 * a0]
-b_shift = [0.0, 0.0, 0.00, 0.5 *b0, 0.5 * b0, 0.5 * b0]
+a0 = 18.0
+b0 = 20.0
+num_units = 20
+blend = [1,1,1,1,1,1,1,1,2,2]
+#blend += [1,1,1,1,1,1,1,1,1,1]
+blend += [2,2,2,2,2,2,2,2,2,2]
+a_shift = [0.0, a0, 0.5 *a0, 1.5 * a0]
+b_shift = [0.0, 0.0, 0.5 *b0, 0.5 * b0]
 
-a_shift += a_shift + a_shift
+a_shift += a_shift + a_shift + a_shift +a_shift + a_shift
 b_shift += [x + b0 for x in b_shift] + [x + 2*b0 for x in b_shift] 
+b_shift += [x + 3*b0 for x in b_shift] 
+print(a_shift)
+print(b_shift)
 
 c_average = (44.70 +47.28)/2.0
 #print(a_shift)
@@ -42,6 +45,15 @@ for i in range(num_atoms_1):
     line = all_lines[i+2].split()
     atoms_1.append([line[0], float(line[1]),float(line[2]),float(line[3]) * c_average/c1])
 
+x_max = max(atoms_1, key=lambda x:x[1])[1]
+x_min = min(atoms_1, key=lambda x:x[1])[1]
+x_center = (x_max + x_min)/2.0
+y_max = max(atoms_1, key=lambda x:x[2])[2]
+y_min = min(atoms_1, key=lambda x:x[2])[2]
+y_center = (y_max + y_min)/2.0
+
+atoms_1_center = [[atom[0], atom[1]-x_center, atom[2]-y_center, atom[3]] for atom in atoms_1]
+
 with open(file2, "r") as f:
     all_lines = f.readlines()
 if len(all_lines) < 3:
@@ -61,30 +73,40 @@ for i in range(num_atoms_2):
     line = all_lines[i+2].split()
     atoms_2.append([line[0], float(line[1]),float(line[2]),float(line[3]) * c_average/c2])
 
+x_max = max(atoms_2, key=lambda x:x[1])[1]
+x_min = min(atoms_2, key=lambda x:x[1])[1]
+x_center = (x_max + x_min)/2.0
+y_max = max(atoms_2, key=lambda x:x[2])[2]
+y_min = min(atoms_2, key=lambda x:x[2])[2]
+y_center = (y_max + y_min)/2.0
+
+atoms_2_center = [[atom[0], atom[1]-x_center, atom[2]-y_center, atom[3]] for atom in atoms_2]
+
 
 atoms_blend = []
 for i in range(num_units):
+    alpha = random() * 3.14
     if blend[i] == 1:
-        for atom in atoms_1:
-            x = atom[1] + a_shift[i]
-            y = atom[2] + b_shift[i]
+        for atom in atoms_1_center:
+            x = atom[1] * math.cos(alpha) + atom[2] * math.sin(alpha) + a_shift[i]
+            y = -atom[2] * math.sin(alpha) + atom[2] * math.cos(alpha) + b_shift[i]
             z = atom[3]
             atoms_blend.append([atom[0], x,y,z+8.0])
     elif blend[i] == 2:
-        for atom in atoms_2:
-            x = atom[1] + a_shift[i]
-            y = atom[2] + b_shift[i]
+        for atom in atoms_2_center:
+            x = atom[1] * math.cos(alpha) + atom[2] * math.sin(alpha) + a_shift[i]
+            y = -atom[2] * math.sin(alpha) + atom[2] * math.cos(alpha) + b_shift[i]
             z = atom[3]
             atoms_blend.append([atom[0], x,y,z ])
 
 
 xyz_lines = "%d\n"%len(atoms_blend)
 
-lattice_vec[0] = 3.0 * a0
+lattice_vec[0] = 2.0 * a0
 lattice_vec[1] = 0.0
 lattice_vec[2] = 0.0
 lattice_vec[3] = 0.0
-lattice_vec[4] = 3.0*b0
+lattice_vec[4] = 5.0*b0
 lattice_vec[5] = 0.0
 lattice_vec[6] = 0.0
 lattice_vec[7] = 0.0

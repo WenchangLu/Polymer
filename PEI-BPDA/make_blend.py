@@ -89,13 +89,13 @@ for i in range(num_units):
     if blend[i] == 1:
         for atom in atoms_1_center:
             x = atom[1] * math.cos(alpha) + atom[2] * math.sin(alpha) + a_shift[i]
-            y = -atom[2] * math.sin(alpha) + atom[2] * math.cos(alpha) + b_shift[i]
+            y = -atom[1] * math.sin(alpha) + atom[2] * math.cos(alpha) + b_shift[i]
             z = atom[3]
             atoms_blend.append([atom[0], x,y,z+8.0])
     elif blend[i] == 2:
         for atom in atoms_2_center:
             x = atom[1] * math.cos(alpha) + atom[2] * math.sin(alpha) + a_shift[i]
-            y = -atom[2] * math.sin(alpha) + atom[2] * math.cos(alpha) + b_shift[i]
+            y = -atom[1] * math.sin(alpha) + atom[2] * math.cos(alpha) + b_shift[i]
             z = atom[3]
             atoms_blend.append([atom[0], x,y,z ])
 

@@ -86,6 +86,7 @@ atoms_2_center = [[atom[0], atom[1]-x_center, atom[2]-y_center, atom[3]] for ato
 atoms_blend = []
 for i in range(num_units):
     alpha = random() * 3.14
+    alpha = 0.0
     if blend[i] == 1:
         for atom in atoms_1_center:
             x = atom[1] * math.cos(alpha) + atom[2] * math.sin(alpha) + a_shift[i]

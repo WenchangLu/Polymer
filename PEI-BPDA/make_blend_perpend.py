@@ -89,7 +89,7 @@ for i in range(num_units):
         x = atom[1] * math.cos(alpha) + atom[2] * math.sin(alpha) + a_shift[i]
         y = -atom[1] * math.sin(alpha) + atom[2] * math.cos(alpha) + b_shift[i]
         z = atom[3] +z_rand
-        atoms_blend.append([atom[0], x,y,z+8.0])
+        atoms_blend.append([atom[0], x,y,z])
 
 for i in range(num_units):
     alpha = random() * 3.14* 2.0
@@ -98,7 +98,7 @@ for i in range(num_units):
         x = atom[1] * math.cos(alpha) + atom[2] * math.sin(alpha) + a_shift[i]
         y = -atom[1] * math.sin(alpha) + atom[2] * math.cos(alpha) + b_shift[i]
         z = atom[3] +z_rand
-        atoms_blend.append([atom[0], z,y,x ])
+        atoms_blend.append([atom[0], z,y + 4.0* b0,x ])
 
 
 xyz_lines = "%d\n"%len(atoms_blend)
@@ -107,7 +107,7 @@ lattice_vec[0] = 3.0 * a0
 lattice_vec[1] = 0.0
 lattice_vec[2] = 0.0
 lattice_vec[3] = 0.0
-lattice_vec[4] = 4.0 * b0
+lattice_vec[4] = 8.0 * b0
 lattice_vec[5] = 0.0
 lattice_vec[6] = 0.0
 lattice_vec[7] = 0.0

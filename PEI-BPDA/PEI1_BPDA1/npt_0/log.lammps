@@ -1,0 +1,197 @@
+LAMMPS (29 Aug 2024 - Development - patch_29Aug2024-269-g805c2ae131-modified)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+# REAX potential for
+# .....
+
+boundary        p p p
+units           real
+
+atom_style      charge
+#read_data       ./lmp.data
+read_data       ./final.lammps
+Reading data file ...
+  triclinic box = (1.9855364 4.816477 -0.19360916) to (10.014464 13.183523 45.878076) with tilt (0 0 0)
+  1 by 2 by 8 MPI processor grid
+  reading atoms ...
+  258 atoms
+  reading velocities ...
+  258 velocities
+  read_data CPU = 0.004 seconds
+replicate       1 1 1
+Replication is creating a 1x1x1 = 1 times larger system...
+  triclinic box = (1.9855364 4.816477 -0.19360916) to (10.014464 13.183523 45.878076) with tilt (0 0 0)
+  1 by 2 by 8 MPI processor grid
+  258 atoms
+  replicate CPU = 0.001 seconds
+
+#change_box all triclinic
+pair_style      reaxff NULL
+#pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.FC C O H N
+#pair_coeff      * * ../../ForceFiledFiles/ffield.reax.FC C H O N
+pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.mattsson C H O N
+Reading potential file ../../../ForceFiledFiles/ffield.reax.mattsson with DATE: 2010-02-19
+neighbor        2. bin
+neigh_modify    every 10 delay 0 check no
+fix             q all qeq/reax 1 0.0 10.0 1e-6 reaxff
+
+variable        dt_MD equal 0.1
+variable        dt_MIN equal 10*v_dt_MD
+timestep        ${dt_MD}
+timestep        0.1
+thermo_style    custom step temp epair etotal press fmax fnorm density
+thermo          1
+write_data      init.lmpdata
+System init for write_data ...
+Neighbor list info ...
+  update: every = 10 steps, delay = 0 steps, check = no
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 12
+  ghost atom cutoff = 12
+  binsize = 6, bins = 2 2 8
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair reaxff, perpetual
+      attributes: half, newton off, ghost
+      pair build: half/bin/ghost/newtoff
+      stencil: full/ghost/bin/3d
+      bin: standard
+  (2) fix qeq/reax, perpetual, copy from (1)
+      attributes: half, newton off
+      pair build: copy
+      stencil: none
+      bin: none
+variable        Tdamp equal 100*dt
+variable        Pdamp equal 100*dt
+compute         Mu all property/atom xu yu zu
+variable        qx atom q*c_Mu[1]
+variable        qy atom q*c_Mu[2]
+variable        qz atom q*c_Mu[3]
+compute         Mx all reduce sum v_qx
+compute         My all reduce sum v_qy
+compute         Mz all reduce sum v_qz
+thermo_style    custom step temp epair etotal press fmax fnorm density vol c_Mx c_My c_Mz
+dump            dcd all dcd 200 dump.dcd
+dump_modify     dcd unwrap yes
+dump            qxyz all custom 20 dump.qxyz.txt id q xu yu zu
+dump_modify     qxyz sort id
+dump            xyz_form all xyz 100 dump.xyz
+dump_modify     xyz_form sort id
+
+variable        T0 equal 500
+variable        T1 equal 300
+timestep        ${dt_MD}
+timestep        0.1
+#fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
+#fix             npt all npt temp ${T0} ${T1} ${Tdamp}  x 500 500  100.0  y 500 500 100.0  z 0 0  1000.0
+
+
+
+
+# isotropic volume relaxation to hydrostatic target
+
+fix             3 all box/relax  vmax 1.0e-3
+variable        emin equal pe+f_3/atoms
+thermo_style    custom step temp pe pxx pyy pzz f_3 v_emin  cella cellb cellc density
+minimize    1.0e-6 0.001 1000 10000
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- Type Label Framework: https://doi.org/10.1021/acs.jpcb.3c08419
+
+@Article{Gissinger24,
+ author = {Jacob R. Gissinger, Ilia Nikiforov, Yaser Afshar, Brendon Waters, Moon-ki Choi, Daniel S. Karls, Alexander Stukowski, Wonpil Im, Hendrik Heinz, Axel Kohlmeyer, and Ellad B. Tadmor},
+ title = {Type Label Framework for Bonded Force Fields in LAMMPS},
+ journal = {J. Phys. Chem. B},
+ year =    2024,
+ volume =  128,
+ number =  13,
+ pages =   {3282–-3297}
+}
+
+- pair reaxff command: doi:10.1016/j.parco.2011.08.005
+
+@Article{Aktulga12,
+ author = {H. M. Aktulga and J. C. Fogarty and S. A. Pandit and A. Y. Grama},
+ title = {Parallel Reactive Molecular Dynamics: {N}umerical Methods and Algorithmic Techniques},
+ journal = {Parallel Computing},
+ year =    2012,
+ volume =  38,
+ number =  {4--5},
+ pages =   {245--259}
+}
+
+- fix qeq/reaxff command: doi:10.1016/j.parco.2011.08.005
+
+@Article{Aktulga12,
+ author = {H. M. Aktulga and J. C. Fogarty and S. A. Pandit and A. Y. Grama},
+ title = {Parallel Reactive Molecular Dynamics: {N}umerical Methods and Algorithmic Techniques},
+ journal = {Parallel Computing},
+ year =    2012,
+ volume =  38,
+ pages =   {245--259}
+}
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Switching to 'neigh_modify every 1 delay 0 check yes' setting during minimization
+WARNING: Energy due to 3 extra global DOFs will be included in minimizer energies
+ (src/min.cpp:219)
+Per MPI rank memory allocation (min/avg/max) = 39.88 | 40.81 | 41.9 Mbytes
+   Step          Temp          PotEng          Pxx            Pyy            Pzz            f_3           v_emin         Cella          Cellb          Cellc         Density    
+         0   288.7024      -36873.63       22305.577      8580.0988      22978.507      0             -36873.63       8.0289272      8.3670459      46.071685      1.2265988    
+         1   288.7024      -36881.353      12121.469      1210.2712     -3938.1429      0             -36881.353      8.0289272      8.3670459      46.071685      1.2265988    
+         2   288.7024      -36882.065      8064.8381      759.26392     -8107.1223      0             -36882.065      8.0289272      8.3670459      46.071685      1.2265988    
+         3   288.7024      -36922.957     -9177.4983     -4999.0386     -23991.959      0             -36922.957      8.0289272      8.3670459      46.071685      1.2265988    
+         4   288.7024      -36930.688     -12033.938     -6345.8625     -27039.845      0             -36930.688      8.0289272      8.3670459      46.071685      1.2265988    
+         5   288.7024      -36935.146     -13591.25      -6979.7097     -28648.513      0             -36935.146      8.0289272      8.3670459      46.071685      1.2265988    
+         6   288.7024      -36938.253     -14718.362     -7425.4947     -29823.685      0             -36938.253      8.0289272      8.3670459      46.071685      1.2265988    
+         7   288.7024      -36941.091     -15752.942     -7829.8504     -30911.793      0             -36941.091      8.0289272      8.3670459      46.071685      1.2265988    
+         8   288.7024      -36943.663     -16744.1       -8211.1081     -31945.698      0             -36943.663      8.0289272      8.3670459      46.071685      1.2265988    
+         9   288.7024      -36945.542     -17461.826     -8484.8647     -32690.981      0             -36945.542      8.0289272      8.3670459      46.071685      1.2265988    
+        10   288.7024      -36947.256     -18102.608     -8727.1005     -33352.229      0             -36947.256      8.0289272      8.3670459      46.071685      1.2265988    
+        11   288.7024      -36948.644     -18602.912     -8914.4115     -33864.365      0             -36948.644      8.0289272      8.3670459      46.071685      1.2265988    
+        12   288.7024      -36949.565     -18921.013     -9032.4222     -34187.282      0             -36949.565      8.0289272      8.3670459      46.071685      1.2265988    
+        13   288.7024      -36950.701     -19300.172     -9171.7722     -34569.719      0             -36950.701      8.0289272      8.3670459      46.071685      1.2265988    
+        14   288.7024      -36951.235     -19470.051     -9233.5708     -34739.459      0             -36951.235      8.0289272      8.3670459      46.071685      1.2265988    
+        15   288.7024      -36951.297     -19489.243     -9240.5213     -34758.545      0             -36951.297      8.0289272      8.3670459      46.071685      1.2265988    
+        16   288.7024      -36951.312     -19493.894     -9242.1927     -34763.079      0             -36951.312      8.0289272      8.3670459      46.071685      1.2265988    
+Loop time of 1.15934 on 16 procs for 16 steps with 258 atoms
+
+99.6% CPU use with 16 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+     -36873.6302410398  -36951.2972669872  -36951.3119343807
+  Force two-norm initial, final = 973.12079 689.91082
+  Force max component initial, final = 157.17307 121.4547
+  Final line search alpha, max atom move = 0.00020581904 0.024997689
+  Iterations, force evaluations = 16 74
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.73158    | 0.77587    | 0.82732    |   3.2 | 66.92
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.014936   | 0.066319   | 0.11022    |  10.9 |  5.72
+Output  | 0.00098428 | 0.00099948 | 0.0011896  |   0.0 |  0.09
+Modify  | 0.31028    | 0.31041    | 0.31049    |   0.0 | 26.77
+Other   |            | 0.005745   |            |       |  0.50
+
+Nlocal:         16.125 ave          21 max          12 min
+Histogram: 1 1 1 1 6 4 0 1 0 1
+Nghost:        2217.19 ave        2296 max        2151 min
+Histogram: 4 0 0 2 3 3 0 1 2 1
+Neighs:        9671.31 ave       12715 max        6898 min
+Histogram: 1 1 1 1 4 3 3 1 0 1
+
+Total # of neighbors = 154741
+Ave neighs/atom = 599.77132
+Neighbor list builds = 0
+Dangerous builds not checked
+
+write_data opt_str.lammps
+System init for write_data ...
+Total wall time: 0:00:01

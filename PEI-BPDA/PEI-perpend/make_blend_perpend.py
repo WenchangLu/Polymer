@@ -53,7 +53,7 @@ for atom in atoms_2cells:
     atoms_perp.append([atom[0], x,y,z])
 for atom in atoms_2cells:
     x = atom[3] 
-    y = atom[2] + 2.0
+    y = atom[2] + 3.0
     z = atom[1] + c1
     atoms_perp.append([atom[0], x,y,z])
 

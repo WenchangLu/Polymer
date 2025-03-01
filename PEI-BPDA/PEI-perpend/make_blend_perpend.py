@@ -37,6 +37,7 @@ atoms_1_center = [[atom[0], atom[1]-x_center, atom[2]-y_center, atom[3]] for ato
 atoms_2cells = []
 for i in range(2):
     alpha = random() * 3.14* 2.0
+    alpha = 0.0
     for atom in atoms_1_center:
         x = atom[1] * math.cos(alpha) + atom[2] * math.sin(alpha) 
         y = -atom[1] * math.sin(alpha) + atom[2] * math.cos(alpha)
@@ -46,14 +47,14 @@ for i in range(2):
 # add perpend chain
 atoms_perp = []
 for atom in atoms_2cells:
-    x = atom[1] + c1/2.0
+    x = atom[1] + c1
     y = atom[2]
     z = atom[3]
     atoms_perp.append([atom[0], x,y,z])
 for atom in atoms_2cells:
     x = atom[3] 
     y = atom[2] + 2.0
-    z = atom[1] + c1/2.0
+    z = atom[1] + c1
     atoms_perp.append([atom[0], x,y,z])
 
 

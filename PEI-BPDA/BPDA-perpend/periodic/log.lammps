@@ -1,0 +1,168 @@
+LAMMPS (19 Nov 2024 - Development - patch_19Nov2024-56-ga78aee5731-modified)
+  using 1 OpenMP thread(s) per MPI task
+# REAX potential for
+# .....
+
+boundary        p p p
+units           real
+
+atom_style      charge
+#read_data       ./lmp.data
+read_data       ./final.lammps
+Reading data file ...
+  triclinic box = (9.717836 4.9965364 9.2171686) to (78.424191 11.003464 78.924858) with tilt (0 0 0)
+  4 by 1 by 4 MPI processor grid
+  reading atoms ...
+  480 atoms
+  reading velocities ...
+  480 velocities
+  read_data CPU = 0.007 seconds
+replicate       1 1 1
+Replication is creating a 1x1x1 = 1 times larger system...
+  triclinic box = (9.717836 4.9965364 9.2171686) to (78.424191 11.003464 78.924858) with tilt (0 0 0)
+  4 by 1 by 4 MPI processor grid
+  480 atoms
+  replicate CPU = 0.001 seconds
+
+#change_box all triclinic
+pair_style      reaxff NULL
+#pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.FC C O H N
+#pair_coeff      * * ../../ForceFiledFiles/ffield.reax.FC C H O N
+pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.mattsson C H O N
+Reading potential file ../../../ForceFiledFiles/ffield.reax.mattsson with DATE: 2010-02-19
+neighbor        2. bin
+neigh_modify    every 10 delay 0 check no
+fix             q all qeq/reax 1 0.0 10.0 1e-6 reaxff
+
+variable        dt_MD equal 0.2
+variable        dt_MIN equal 10*v_dt_MD
+timestep        ${dt_MD}
+timestep        0.2
+thermo_style    custom step temp epair etotal press fmax fnorm density
+thermo          20
+write_data      init.lmpdata
+System init for write_data ...
+Neighbor list info ...
+  update: every = 10 steps, delay = 0 steps, check = no
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 12
+  ghost atom cutoff = 12
+  binsize = 6, bins = 12 2 12
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair reaxff, perpetual
+      attributes: half, newton off, ghost
+      pair build: half/bin/ghost/newtoff
+      stencil: full/ghost/bin/3d
+      bin: standard
+  (2) fix qeq/reax, perpetual, copy from (1)
+      attributes: half, newton off
+      pair build: copy
+      stencil: none
+      bin: none
+variable        Tdamp equal 100*dt
+variable        Pdamp equal 100*dt
+compute         Mu all property/atom xu yu zu
+variable        qx atom q*c_Mu[1]
+variable        qy atom q*c_Mu[2]
+variable        qz atom q*c_Mu[3]
+compute         Mx all reduce sum v_qx
+compute         My all reduce sum v_qy
+compute         Mz all reduce sum v_qz
+thermo_style    custom step temp epair etotal press fmax fnorm density vol c_Mx c_My c_Mz
+dump            dcd all dcd 200 dump.dcd
+dump_modify     dcd unwrap yes
+dump            qxyz all custom 20 dump.qxyz.txt id q xu yu zu
+dump_modify     qxyz sort id
+dump            xyz_form all xyz 100 dump.xyz
+dump_modify     xyz_form sort id
+
+variable        T0 equal 800
+variable        T1 equal 300
+timestep        ${dt_MD}
+timestep        0.2
+#fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             npt all npt temp 800 ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             npt all npt temp 800 300 ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             npt all npt temp 800 300 20  aniso 0 0 ${Pdamp}
+fix             npt all npt temp 800 300 20  aniso 0 0 20
+#fix             npt all npt temp ${T0} ${T1} ${Tdamp}  x 500 500  100.0  y 500 500 100.0  z 500 0  1000.0
+
+fix             mom all momentum 1 linear 1 1 1
+run             2000
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- pair reaxff command: doi:10.1016/j.parco.2011.08.005
+
+@Article{Aktulga12,
+ author = {H. M. Aktulga and J. C. Fogarty and S. A. Pandit and A. Y. Grama},
+ title = {Parallel Reactive Molecular Dynamics: {N}umerical Methods and Algorithmic Techniques},
+ journal = {Parallel Computing},
+ year =    2012,
+ volume =  38,
+ number =  {4--5},
+ pages =   {245--259}
+}
+
+- fix qeq/reaxff command: doi:10.1016/j.parco.2011.08.005
+
+@Article{Aktulga12,
+ author = {H. M. Aktulga and J. C. Fogarty and S. A. Pandit and A. Y. Grama},
+ title = {Parallel Reactive Molecular Dynamics: {N}umerical Methods and Algorithmic Techniques},
+ journal = {Parallel Computing},
+ year =    2012,
+ volume =  38,
+ pages =   {245--259}
+}
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Per MPI rank memory allocation (min/avg/max) = 6.375 | 17.03 | 26.01 Mbytes
+   Step          Temp          E_pair         TotEng         Press           Fmax          Fnorm         Density         Volume          c_Mx           c_My           c_Mz     
+         0   301.4898      -69705.095     -69274.626      9540.1095      163.51004      1398.3854      0.25420117     28769.345      30.069163      0.2418018      27.822044    
+        20   314.42746     -69715.21      -69266.268     -8632.5247      143.58146      1309.383       0.25334801     28866.227      30.663155      0.28526367     27.548546    
+        40   327.12858     -69708.056     -69240.979      5813.8678      156.56879      1496.777       0.25487312     28693.496      31.311703      0.36380655     27.240059    
+        60   341.0183      -69705.994     -69219.086     -5857.201       124.30683      1311.8245      0.25411037     28779.625      32.619663      0.72017786     27.1187      
+        80   357.84069     -69704.028     -69193.1        4868.1292      165.639        1384.6955      0.25529355     28646.243      32.81978       1.016964       27.180144    
+       100   362.79764     -69679.605     -69161.6       -5182.8347      169.89221      1386.0146      0.25520466     28656.22       32.272688      1.1670487      27.420987    
+       120   366.45149     -69651.841     -69128.619      5896.5795      155.29681      1512.6588      0.25649457     28512.109      32.336408      1.3736475      27.832999    
+       140   384.68376     -69641.481     -69092.227     -4046.6231      187.39048      1408.7883      0.25554453     28618.108      31.615556      1.1511437      28.257434    
+       160   395.89573     -69620.719     -69055.456      3734.3383      157.6475       1459.8986      0.25692838     28463.967      31.625029      0.9655566      28.222087    
+       180   403.53718     -69591.283     -69015.11      -3700.457       160.63297      1533.7661      0.25688718     28468.533      31.232411      0.70475943     28.739641    
+       200   415.64619     -69565.806     -68972.343      2627.7271      158.84347      1540.5898      0.25785332     28361.864      30.586966      0.55701497     29.359156    
+       220   435.18187     -69552.183     -68930.827     -930.11225      151.81715      1464.4396      0.25845902     28295.399      31.169499      0.78113793     30.056442    
+       240   453.11307     -69531.821     -68884.862      700.94127      166.40414      1571.5128      0.25954013     28177.534      30.761783      0.82454143     30.912667    
+       260   467.00629     -69505.453     -68838.658     -2775.2144      192.55775      1639.5328      0.26053568     28069.863      30.916376      0.73401956     30.460069    
+       280   483.7353      -69482.786     -68792.105      2978.3257      199.1159       1602.7709      0.26116494     28002.231      30.262034      0.48021558     30.093775    
+       300   499.024       -69454.217     -68741.707     -1561.0739      189.02199      1623.1876      0.26203739     27908.998      29.366539      0.21406005     29.44981     
+       320   508.20803     -69418.968     -68693.344      1216.819       171.49797      1625.3372      0.26207073     27905.447      29.56861       0.22429716     30.211283    
+       340   546.47775     -69422.891     -68642.625     -2183.1649      173.73247      1617.3123      0.26227969     27883.215      29.252245      0.23953758     30.531894    
+       360   556.82671     -69387.937     -68592.895      482.27217      201.86189      1671.7553      0.26325179     27780.252      30.330663      0.68977246     30.319464    
+       380   572.02451     -69358.539     -68541.798      1502.5994      226.30543      1790.2521      0.26270058     27838.542      30.924419      1.1476199      30.461635    
+       400   602.71715     -69351.508     -68490.944     -2569.6301      218.77316      1674.4193      0.26244076     27866.102      30.049819      1.3111749      30.437892    
+       420   618.25069     -69323.555     -68440.812     -1443.5265      345.04345      1777.0479      0.26224918     27886.459      29.895514      1.2708614      31.486382    
+       440   651.42687     -69321.792     -68391.679      5331.8738      180.17696      1659.9682      0.26246249     27863.795      28.621124      0.94780785     32.238534    
+       460   670.40109     -69304.919     -68347.715     -1682.8183      197.528        1722.9014      0.2615679      27959.092      28.1252        0.72129737     32.359315    
+       480   690.37058     -69288.281     -68302.564     -3182.9275      187.35628      1699.3602      0.26094019     28026.349      28.015673      0.64168769     32.14721     
+       500   673.87562     -69228.657     -68266.492      4507.83        172.87797      1797.206       0.26122285     27996.023      26.605825      0.66802752     30.887322    
+       520   688.4338      -69220.32      -68237.369      4925.9045      179.14273      1770.9685      0.2612719      27990.767      27.021288      0.79928598     30.206522    
+       540   703.89914     -69211.688     -68206.655     -3872.3601      187.30844      1740.1481      0.26086988     28033.903      26.555372      0.56351992     30.282281    
+       560   708.5786      -69191.362     -68179.648     -5802.9842      185.05194      1690.9701      0.26093221     28027.206      26.674993      0.31103749     30.434446    
+       580   698.53919     -69159.207     -68161.827     -3395.618       232.1595       1756.0204      0.26117713     28000.924      26.419523     -0.075031807    30.753353    
+       600   694.22413     -69144.294     -68153.075      3763.6621      200.74595      1760.8445      0.26294509     27812.655      24.86672      -0.40348705     28.987778    
+       620   718.44636     -69169.081     -68143.278      4085.7216      221.00777      1800.007       0.2642246      27677.972      25.489467     -0.27890981     27.66118     
+       640   717.93997     -69172.932     -68147.851     -3290.3329      235.68732      1765.445       0.26445818     27653.525      25.307611     -0.22444273     27.535483    
+       660   697.42124     -69153.431     -68157.648     -3315.6401      181.45091      1746.4788      0.26526303     27569.62       25.926846      0.14253679     27.786155    
+       680   666.42835     -69126.834     -68175.303      2388.9183      223.62784      1804.275       0.26665803     27425.392      26.032966      0.23825609     28.033879    
+       700   690.04294     -69184.335     -68199.086      2839.5538      242.00899      1797.4013      0.26750859     27338.191      24.530753      0.046535429    28.588995    
+       720   667.71517     -69178.833     -68225.464      5256.4752      216.61964      1855.3841      0.26871574     27215.38       24.240783     -0.058376926    28.792226    
+       740   660.76503     -69200.953     -68257.508      5197.6243      217.91238      1824.456       0.26945419     27140.795      23.732663     -0.51217028     28.479454    
+       760   652.72681     -69230.052     -68298.083      406.5774       210.65226      1777.9996      0.269464       27139.807      23.926479     -0.70538121     28.402969    
+       780   621.95689     -69215.564     -68327.529     -6547.9851      205.43607      1807.2161      0.26963687     27122.407      24.193428     -0.58863523     28.250538    
+       800   625.96927     -69257.508     -68363.744     -4992.2148      194.71781      1708.0794      0.27009566     27076.336      23.7709       -0.41022025     27.668435    
+       820   611.12256     -69266.826     -68394.261      25.109958      217.65957      1689.4368      0.27143506     26942.728      23.710904     -0.19401811     27.20613     
+       840   592.2427      -69274.294     -68428.685      4328.014       186.66367      1688.0704      0.27156572     26929.764      23.643098     -0.62461028     27.662774    
+       860   595.81688     -69306.867     -68456.155     -564.34544      174.5096       1655.5492      0.27120588     26965.49

@@ -80,9 +80,9 @@ atoms.sort()
 
 #first 10 chains have 138 atoms each
 for i in range(10):
-    x = atoms[i*138][2]
-    y = atoms[i*138][3]
-    z = atoms[i*138][4]
+    x = atoms[i*69][2]
+    y = atoms[i*69][3]
+    z = atoms[i*69][4]
     xshift = math.floor(x/a) * a
     yshift = math.floor(y/b) * b
     zshift = math.floor(z/c) * c
@@ -92,9 +92,9 @@ for i in range(10):
         atoms[i*138+j][4] -= zshift
 #second 20 chains have 120 atoms each
 for i in range(20):
-    x = atoms[1380+i*120][2]
-    y = atoms[1380+i*120][3]
-    z = atoms[1380+i*120][4]
+    x = atoms[1380+i*60][2]
+    y = atoms[1380+i*60][3]
+    z = atoms[1380+i*60][4]
     xshift = math.floor(x/a) * a
     yshift = math.floor(y/b) * b
     zshift = math.floor(z/c) * c
@@ -104,9 +104,9 @@ for i in range(20):
         atoms[1380+i*120+j][4] -= zshift
 #last 10 chains have 138 atoms each
 for i in range(10):
-    x = atoms[1380 + 120 * 20 +i*138][2]
-    y = atoms[1380 + 120 * 20 +i*138][3]
-    z = atoms[1380 + 120 * 20 +i*138][4]
+    x = atoms[1380 + 120 * 20 +i*69][2]
+    y = atoms[1380 + 120 * 20 +i*69][3]
+    z = atoms[1380 + 120 * 20 +i*69][4]
     xshift = math.floor(x/a) * a
     yshift = math.floor(y/b) * b
     zshift = math.floor(z/c) * c

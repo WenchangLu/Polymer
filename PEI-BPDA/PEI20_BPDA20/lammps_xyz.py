@@ -78,13 +78,16 @@ for i in range(num_atoms):
 
 atoms.sort()
 
+y_min = atoms[0][3]
+for atom in atoms:
+    atom[3] -= y_min
 #first 10 chains have 138 atoms each
 for i in range(10):
     x = atoms[i*138][2]
     y = atoms[i*138][3]
     z = atoms[i*138][4]
     xshift = round(x/a) * a
-    yshift = round(y/b) * b
+    yshift = math.floor(y/b) * b
     zshift = round(z/c) * c
     for j in range(138):
         atoms[i*138+j][2] -= xshift
@@ -96,7 +99,7 @@ for i in range(20):
     y = atoms[1380+i*120][3]
     z = atoms[1380+i*120][4]
     xshift = round(x/a) * a
-    yshift = round(y/b) * b
+    yshift = math.floor(y/b) * b
     zshift = round(z/c) * c
     for j in range(120):
         atoms[1380+i*120+j][2] -= xshift
@@ -108,7 +111,7 @@ for i in range(10):
     y = atoms[1380 + 120 * 20 +i*138][3]
     z = atoms[1380 + 120 * 20 +i*138][4]
     xshift = round(x/a) * a
-    yshift = round(y/b) * b
+    yshift = math.floor(y/b) * b
     zshift = round(z/c) * c
     for j in range(138):
         atoms[1380 + 120 * 20 +i*138+j][2] -= xshift
@@ -118,6 +121,18 @@ for i in range(10):
 x_min = min(atoms, key=lambda x:x[2])[2]
 y_min = min(atoms, key=lambda x:x[3])[3]
 z_min = min(atoms, key=lambda x:x[4])[4]
+
+y_min = atoms[0][3]
+for atom in atoms:
+    atom[2] -= x_min
+    atom[3] -= y_min
+    atom[4] -= z_min
+for i in range(10):
+    print(i, atoms[i*138][3])
+for i in range(20):
+    print(i, atoms[1380+i*120][3])
+for i in range(10):
+    print(i, atoms[1380 + 120 * 20 +i*138][3])
 
 for atom in atoms:
    xyz_lines += "%s   %f   %f   %f\n"%(atom_symbol[atom[1]], atom[2]-x_min,atom[3]-y_min,atom[4]-z_min)

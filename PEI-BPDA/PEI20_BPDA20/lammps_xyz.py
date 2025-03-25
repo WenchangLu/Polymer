@@ -115,8 +115,12 @@ for i in range(10):
         atoms[1380 + 120 * 20 +i*138+j][3] -= yshift
         atoms[1380 + 120 * 20 +i*138+j][4] -= zshift
 
+x_min = min(atoms, key=lambda x:x[2])[2]
+y_min = min(atoms, key=lambda x:x[3])[3]
+z_min = min(atoms, key=lambda x:x[4])[4]
+
 for atom in atoms:
-   xyz_lines += "%s   %f   %f   %f\n"%(atom_symbol[atom[1]], atom[2],atom[3],atom[4])
+   xyz_lines += "%s   %f   %f   %f\n"%(atom_symbol[atom[1]], atom[2]-x_min,atom[3]-y_min,atom[4]-z_min)
 
 with open("final.xyz", "w") as f:
     f.write(xyz_lines)

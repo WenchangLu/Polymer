@@ -10,6 +10,7 @@ file2 = "../BPDA.xyz"
 #blend = [1,1,1,1,1,1]  #pure PES
 num_units = 20
 
+
 c_average = (44.70 +47.28)/2.0
 #print(a_shift)
 #print(b_shift)

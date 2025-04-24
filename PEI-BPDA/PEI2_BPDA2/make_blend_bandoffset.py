@@ -8,8 +8,7 @@ from random import random
 file1 = "../PEI.xyz"
 file2 = "../BPDA.xyz"
 #blend = [1,1,1,1,1,1]  #pure PES
-num_units = 20
-
+num_units = 4
 
 c_average = (44.70 +47.28)/2.0
 #print(a_shift)
@@ -73,19 +72,26 @@ atoms_2_center = [[atom[0], atom[1]-x_center, atom[2]-y_center, atom[3]] for ato
 
 bshift = 8.0
 atoms_blend = []
-for i in range(num_units):
+for i in range(1):
     for atom in atoms_1_center:
         x = atom[1]
         y = atom[2] +  bshift * float(i)
         z = atom[3] 
         atoms_blend.append([atom[0], x,y,z])
 
-for i in range(num_units):
+for i in range(2):
    for atom in atoms_2_center:
        x = atom[1]
-       y = atom[2] + bshift * float(i+20)
+       y = atom[2] + bshift * float(i+1)+2.0
        z = atom[3] 
        atoms_blend.append([atom[0], x,y,z ])
+
+for i in range(1):
+    for atom in atoms_1_center:
+        x = atom[1]
+        y = atom[2] +  bshift * float(i+3)+4.0
+        z = atom[3] 
+        atoms_blend.append([atom[0], x,y,z])
 
 
 xyz_lines = "%d\n"%len(atoms_blend)
@@ -94,7 +100,7 @@ lattice_vec[0] = 8.0
 lattice_vec[1] = 0.0
 lattice_vec[2] = 0.0
 lattice_vec[3] = 0.0
-lattice_vec[4] = bshift * 40.0
+lattice_vec[4] = bshift * 4.0 +6.0
 lattice_vec[5] = 0.0
 lattice_vec[6] = 0.0
 lattice_vec[7] = 0.0
@@ -107,6 +113,6 @@ xyz_lines +='Lattice="' + lattice +'"\n'
 for atom in atoms_blend:
     xyz_lines += "%s   %f   %f   %f\n"%(atom[0], atom[1] , atom[2] ,atom[3] )
 
-filename = "20+20.xyz"    
+filename = "PEI1+BPDA2+PEI1.xyz"    
 with open(filename, "w") as f:
     f.write(xyz_lines)

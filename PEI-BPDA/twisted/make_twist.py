@@ -136,11 +136,64 @@ for atom in atoms_1_center:
     z = atom[3] + 3.0* c_average
     atoms_blend.append([atom[0], x,y,z])
 
-atoms_twist2 = []
-for atom in atoms_blend:
-    atoms_twist2.append([atom[0], atom[2]+0.5*c_average,atom[1]-0.5*c_average,atom[3]+0.5*c_average])
+# second chains
+# chain along 010 + origin from (c/2,-c/2,c/2)
+for atom in atoms_1_center:
+    x = atom[1] + c_average *0.5
+    y = atom[3] - c_average *0.5
+    z = atom[2] + c_average *0.5
+    atoms_blend.append([atom[0], x,y,z])
 
-atoms_blend += atoms_twist2
+# chain along 001 + origin from (c/2, c/2,c/2)
+for atom in atoms_1_center:
+    x = atom[1] + c_average *0.5
+    y = atom[2] + c_average *0.5
+    z = atom[3] + c_average *0.5
+    atoms_blend.append([atom[0], x,y,z])
+
+# chain along 100 + origin from (c/2, c/2,3c/2)
+for atom in atoms_1_center:
+    x = atom[3] + c_average *0.5
+    y = atom[2] + c_average *0.5
+    z = atom[1] + c_average *1.5
+    atoms_blend.append([atom[0], x,y,z])
+
+# chain along 001 + origin from (3c/2, c/2,3c/2)
+for atom in atoms_1_center:
+    x = atom[1] + c_average *1.5
+    y = atom[2] + c_average *0.5
+    z = atom[3] + c_average *1.5
+    atoms_blend.append([atom[0], x,y,z])
+
+# chain along 0-10 + origin from (3c/2, c/2,5c/2)
+for atom in atoms_1_center:
+    x = atom[1] + c_average *1.5
+    y = -atom[3] + c_average *0.5
+    z = atom[2] + c_average *2.5
+    atoms_blend.append([atom[0], x,y,z])
+
+# chain along 001 + origin from (3c/2, -c/2,5c/2)
+for atom in atoms_1_center:
+    x = atom[1] + c_average *1.5
+    y = atom[2] - c_average *0.5
+    z = atom[3] + c_average *2.5
+    atoms_blend.append([atom[0], x,y,z])
+
+# chain along -100 + origin from (3c/2, -c/2,7c/2)
+for atom in atoms_1_center:
+    x = -atom[3] + c_average *1.5
+    y = atom[2] - c_average *0.5
+    z = atom[1] + c_average *3.5
+    atoms_blend.append([atom[0], x,y,z])
+
+# chain along 001 + origin from (c/2, -c/2,7c/2)
+for atom in atoms_1_center:
+    x = atom[1] + c_average *0.5
+    y = atom[2] - c_average *0.5
+    z = atom[3] + c_average *3.5
+    atoms_blend.append([atom[0], x,y,z])
+
+
 xyz_lines = "%d\n"%len(atoms_blend)
 
 lattice_vec[0] = 8.0 + c_average

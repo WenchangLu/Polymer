@@ -138,7 +138,7 @@ for atom in atoms_1_center:
 
 atoms_twist2 = []
 for atom in atoms_blend:
-    atoms_twist2.append([atom[0], atom[2]+0.5*c_average,atom[1]+0.5*c_average,atom[3]+0.5*c_average])
+    atoms_twist2.append([atom[0], atom[2]+0.5*c_average,atom[1]-0.5*c_average,atom[3]+0.5*c_average])
 
 atoms_blend += atoms_twist2
 xyz_lines = "%d\n"%len(atoms_blend)

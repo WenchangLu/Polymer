@@ -40,7 +40,7 @@ y_center = (y_max + y_min)/2.0
 z_max = max(atoms_1, key=lambda x:x[3])[3]
 z_min = min(atoms_1, key=lambda x:x[3])[3]
 z_center = (z_max + z_min)/2.0
-z_center = atoms_1[3][3]
+z_center = atoms_1[2][3]
 
 atoms_1_center = [[atom[0], atom[1]-x_center, atom[2]-y_center, atom[3]-z_center] for atom in atoms_1]
 

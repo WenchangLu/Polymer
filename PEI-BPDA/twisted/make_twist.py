@@ -137,7 +137,7 @@ for atom in atoms_1_center:
     atoms_blend.append([atom[0], x,y,z])
 
 atoms_twisty = []
-for attom in atoms_blend:
+for atom in atoms_blend:
     atoms_twisty.append([atom[0], atom[2] + c *0.5, atom[1] - c* 0.5, atom[3] + c*0.5])
 
 atoms_blend += atoms_twisty

@@ -135,6 +135,12 @@ for atom in atoms_1_center:
     y = atom[2] 
     z = atom[3] + 3.0* c_average
     atoms_blend.append([atom[0], x,y,z])
+
+atoms_twist2 = []
+for atom in atoms_blend:
+    atoms_twist2.append([atom[0], atom[2]+0.5*c_average,atom[1]+0.5*c_average,atom[3]+0.5*c_average])
+
+atoms_blend += atoms_twist2
 xyz_lines = "%d\n"%len(atoms_blend)
 
 lattice_vec[0] = 8.0 + c_average

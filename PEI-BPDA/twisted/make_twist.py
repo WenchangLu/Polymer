@@ -125,8 +125,8 @@ for atom in atoms_1_center:
 # chain along 0-10 + origin from (0,0,2c)
 for atom in atoms_1_center:
     x = atom[1] 
-    y = atom[3] 
-    z = atom[2] + 2.0* c_average
+    y = -atom[3] +c_average
+    z = atom[2] + 3.0* c_average
     atoms_blend.append([atom[0], x,y,z])
 
 # chain along 001 + origin from (0,0,3c)

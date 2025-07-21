@@ -1,0 +1,63 @@
+# REAX potential for 
+# .....
+
+boundary        p p p
+units           real
+
+atom_style      charge
+#read_data       ./lmp.data
+read_data       ./final.lammps
+replicate       1 1 1
+
+#change_box all triclinic
+pair_style      reaxff NULL
+#pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.FC C O H N
+pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.FC C H O N
+#pair_coeff      * * ../../ForceFiledFiles/ffield.reax.mattsson C H O N
+neighbor        2. bin
+neigh_modify    every 10 delay 0 check no
+fix             q all qeq/reax 1 0.0 10.0 1e-6 reaxff
+                
+variable        dt_MD equal 0.1
+variable        dt_MIN equal 10*v_dt_MD
+timestep        ${dt_MD}
+thermo_style    custom step temp epair etotal press fmax fnorm density
+thermo          20
+write_data      init.lmpdata
+variable        Tdamp equal 100*dt
+variable        Pdamp equal 100*dt
+compute         Mu all property/atom xu yu zu
+variable        qx atom q*c_Mu[1]
+variable        qy atom q*c_Mu[2]
+variable        qz atom q*c_Mu[3]
+compute         Mx all reduce sum v_qx
+compute         My all reduce sum v_qy
+compute         Mz all reduce sum v_qz
+thermo_style    custom step temp epair etotal press fmax fnorm density vol c_Mx c_My c_Mz
+dump            dcd all dcd 200 dump.dcd
+dump_modify     dcd unwrap yes
+dump            qxyz all custom 20 dump.qxyz.txt id q xu yu zu
+dump_modify     qxyz sort id
+dump            xyz_form all xyz 100 dump.xyz
+dump_modify     xyz_form sort id
+
+variable        T0 equal 800
+variable        T1 equal 300
+timestep        ${dt_MD}
+#fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             npt all npt temp ${T0} ${T1} ${Tdamp}  iso 0 0 ${Pdamp}
+#fix             npt all npt temp ${T0} ${T1} ${Tdamp}  x 500 500  100.0  y 500 500 100.0  z 0 0  1000.0 
+
+fix             mom all momentum 1 linear 1 1 1
+run             2000
+unfix           npt
+
+
+# isotropic volume relaxation to hydrostatic target
+
+#fix             3 all box/relax  vmax 1.0e-3
+#variable        emin equal pe+f_3/atoms
+#thermo_style    custom step temp pe pxx pyy pzz f_3 v_emin  cella cellb cellc cellalpha cellbeta cellgamma
+#minimize    1.0e-6 0.001 1000 10000
+
+write_data final.lammps

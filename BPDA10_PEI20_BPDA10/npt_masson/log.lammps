@@ -1,0 +1,114 @@
+LAMMPS (19 Nov 2024 - Development - patch_19Nov2024-56-ga78aee5731-modified)
+  using 1 OpenMP thread(s) per MPI task
+# REAX potential for
+# .....
+
+boundary        p p p
+units           real
+
+atom_style      charge
+#read_data       ./lmp.data
+read_data       ./final.lammps
+Reading data file ...
+  triclinic box = (-0.061836472 -2.4734589 -0.35548242) to (8.0618365 322.47346 46.345482) with tilt (0 0 0)
+  1 by 16 by 2 MPI processor grid
+  reading atoms ...
+  5160 atoms
+  reading velocities ...
+  5160 velocities
+  read_data CPU = 0.048 seconds
+replicate       1 1 1
+Replication is creating a 1x1x1 = 1 times larger system...
+  triclinic box = (-0.061836472 -2.4734589 -0.35548242) to (8.0618365 322.47346 46.345482) with tilt (0 0 0)
+  1 by 16 by 2 MPI processor grid
+  5160 atoms
+  replicate CPU = 0.003 seconds
+
+#change_box all triclinic
+pair_style      reaxff NULL
+#pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.FC C O H N
+#pair_coeff      * * ../../ForceFiledFiles/ffield.reax.FC C H O N
+pair_coeff      * * ../../../ForceFiledFiles/ffield.reax.mattsson C H O N
+Reading potential file ../../../ForceFiledFiles/ffield.reax.mattsson with DATE: 2010-02-19
+neighbor        2. bin
+neigh_modify    every 10 delay 0 check no
+fix             q all qeq/reax 1 0.0 10.0 1e-6 reaxff
+
+variable        dt_MD equal 0.1
+variable        dt_MIN equal 10*v_dt_MD
+timestep        ${dt_MD}
+timestep        0.1
+thermo_style    custom step temp epair etotal press fmax fnorm density
+thermo          20
+write_data      init.lmpdata
+System init for write_data ...
+Neighbor list info ...
+  update: every = 10 steps, delay = 0 steps, check = no
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 12
+  ghost atom cutoff = 12
+  binsize = 6, bins = 2 55 8
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair reaxff, perpetual
+      attributes: half, newton off, ghost
+      pair build: half/bin/ghost/newtoff
+      stencil: full/ghost/bin/3d
+      bin: standard
+  (2) fix qeq/reax, perpetual, copy from (1)
+      attributes: half, newton off
+      pair build: copy
+      stencil: none
+      bin: none
+variable        Tdamp equal 100*dt
+variable        Pdamp equal 100*dt
+compute         Mu all property/atom xu yu zu
+variable        qx atom q*c_Mu[1]
+variable        qy atom q*c_Mu[2]
+variable        qz atom q*c_Mu[3]
+compute         Mx all reduce sum v_qx
+compute         My all reduce sum v_qy
+compute         Mz all reduce sum v_qz
+thermo_style    custom step temp epair etotal press fmax fnorm density vol c_Mx c_My c_Mz
+dump            dcd all dcd 200 dump.dcd
+dump_modify     dcd unwrap yes
+dump            qxyz all custom 20 dump.qxyz.txt id q xu yu zu
+dump_modify     qxyz sort id
+dump            xyz_form all xyz 100 dump.xyz
+dump_modify     xyz_form sort id
+
+variable        T0 equal 500
+variable        T1 equal 300
+timestep        ${dt_MD}
+timestep        0.1
+#fix             npt all npt temp ${T0} ${T1} ${Tdamp}  aniso 0 0 ${Pdamp}
+fix             npt all npt temp ${T0} ${T1} ${Tdamp}  iso 0 0 ${Pdamp}
+fix             npt all npt temp 500 ${T1} ${Tdamp}  iso 0 0 ${Pdamp}
+fix             npt all npt temp 500 300 ${Tdamp}  iso 0 0 ${Pdamp}
+fix             npt all npt temp 500 300 10  iso 0 0 ${Pdamp}
+fix             npt all npt temp 500 300 10  iso 0 0 10
+#fix             npt all npt temp ${T0} ${T1} ${Tdamp}  x 500 500  100.0  y 500 500 100.0  z 0 0  1000.0
+
+fix             mom all momentum 1 linear 1 1 1
+run             20000
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- pair reaxff command: doi:10.1016/j.parco.2011.08.005
+
+@Article{Aktulga12,
+ author = {H. M. Aktulga and J. C. Fogarty and S. A. Pandit and A. Y. Grama},
+ title = {Parallel Reactive Molecular Dynamics: {N}umerical Methods and Algorithmic Techniques},
+ journal = {Parallel Computing},
+ year =    2012,
+ volume =  38,
+ number =  {4--5},
+ pages =   {245--259}
+}
+
+- fix qeq/reaxff command: doi:10.1016/j.parco.2011.08.005
+
+@Article{Aktulga12,
+ author = {H. M. Aktulga and J. C. Fogarty and S. A. Pandit and A. Y. Grama},
+ title = {Parallel Reactive Molecular Dynami
